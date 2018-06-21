@@ -2,7 +2,6 @@
 
 namespace App\Model;
 
-use App\Library\ToIdArrayInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
@@ -12,7 +11,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @ORM\Entity()
  * @ORM\Table(name="usuario")
  */
-class Usuario implements ToIdArrayInterface
+class Usuario
 {
 
     const ALUNO = 0;
