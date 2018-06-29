@@ -1,0 +1,5 @@
+module.exports = {
+  lintOnSave: false,
+  baseUrl: process.env.NODE_ENV === 'production' ? '/odin-note/' : '',
+  outputDir: '../public'
+};
