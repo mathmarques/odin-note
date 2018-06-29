@@ -1,3 +1,7 @@
+/public
+!/public/index.php
+!/public/.htaccess
+
 ### Composer ###
 composer.phar
 /vendor/
