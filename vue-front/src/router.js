@@ -5,14 +5,13 @@ import store from './vuex/store'
 import Login from './components/TheLogin'
 import Dashboard from './components/TheDashboard'
 import DashboardHome from './components/Dashboard/DashboardHome'
-import DashboardAmbiente from './components/Dashboard/DashboardAmbiente'
+import DashboardNotebook from './components/Dashboard/DashboardNotebook'
 
 import { AUTH_LOGGED_OUT } from './vuex/mutation-types'
 
 Vue.use(VueRouter)
 
 function requireAuth (to, from, next) {
-  console.log('MEU PAU')
   store.dispatch('me').then(() => {
     next()
   }).catch(() => {
@@ -29,7 +28,8 @@ const routes = [
     beforeEnter: requireAuth,
     children: [
       {path: '', name: 'dashboard', component: DashboardHome},
-      {path: 'ambiente/:id', name: 'ambiente', component: DashboardAmbiente},
+      {path: 'notebook/:notebookId', name: 'notebook', component: DashboardNotebook},
+      {path: 'notebook/:notebookId/note/:noteId', name: 'note', component: DashboardNotebook}
     ]
   },
   {
@@ -45,7 +45,6 @@ const routes = [
 
 export default new VueRouter({
   routes,
-  mode: 'history',
   linkExactActiveClass: 'active',
   saveScrollPosition: true
 })

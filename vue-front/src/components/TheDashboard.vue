@@ -17,12 +17,14 @@
                 <router-link :to="{ name: 'dashboard' }" class="nav-link"><i class="fas fa-home"></i> Dashboard</router-link>
               </li>
             </ul>
-            <h6 class="sidebar-heading px-3 mt-4 mb-1 text-muted">Ambientes</h6>
-            <ul class="nav flex-column">
-              <li class="nav-item" v-for="ambiente in ambientes" :key="ambiente.id">
-                <router-link :to="{name: 'ambiente', params: {id: ambiente.id}}" class="nav-link"><i class="fas fa-caret-right"></i> {{ambiente.nome}}</router-link>
-              </li>
-            </ul>
+            <template v-if="notebook">
+              <h6 class="sidebar-heading px-3 mt-4 mb-1 text-muted">Anotações</h6>
+              <ul class="nav flex-column">
+                <li class="nav-item" v-for="note in notes" :key="note._id">
+                  <router-link :to="{name: 'note', params: {notebookId: notebook._id, noteId: note._id}}" class="nav-link"><i class="fas fa-caret-right"></i> {{note.name}}</router-link>
+                </li>
+              </ul>
+            </template>
           </div>
         </nav>
 
@@ -40,13 +42,36 @@
 </template>
 
 <script>
+  import notebookService from '../common/services/notebook'
+  import {COMPONENT_LOADING, COMPONENT_LOADED} from '../vuex/mutation-types'
 
 export default {
   name: 'TheDashboard',
 
   data () {
     return {
-      ambientes: []
+      notes: [],
+      notebook: undefined
+    }
+  },
+
+  methods: {
+    fetchNotes (notebookId) {
+      this.$store.commit(COMPONENT_LOADING)
+      notebookService.get(notebookId).then(response => {
+        this.notebook = response.notebook
+        this.notes = response.notes
+      }).catch(error => {
+        console.log(error)
+      }).then(() => {
+        this.$store.commit(COMPONENT_LOADED)
+      })
+    }
+  },
+
+  created () {
+    if(this.$store.state.route.params.notebookId) {
+      this.fetchNotes(this.$store.state.route.params.notebookId)
     }
   },
 
@@ -60,8 +85,16 @@ export default {
     }
   },
 
-  created () {
-  }
+  watch: {
+    '$store.state.route.params.notebookId' (to, from) {
+      if (to)
+        this.fetchNotes(to)
+      else {
+        this.notes = [];
+        this.notebook = undefined;
+      }
+    }
+  },
 
 }
 </script>

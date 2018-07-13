@@ -30,4 +30,16 @@ class FullTeachingAPI
         return null;
     }
 
+    public function getNotebooks($userId)
+    {
+        $response = $this->client->request('GET', '/users/'.$userId.'/notebooks');
+
+        $jsonResponse = json_decode((string) $response->getBody(), true);
+
+        if($jsonResponse['success'])
+            return $jsonResponse['notebooks'];
+
+        return null;
+    }
+
 }

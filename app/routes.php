@@ -25,6 +25,13 @@ $app->group('/api', function () {
 
     $this->group('', function () {
         $this->get('/me', '\App\Controller\UserController:meAction')->setName('apiMe');
+
+        $this->group('/notebook', function () {
+            $this->get('', '\App\Controller\NotebookController:getNotebooksAction')->setName('getNotebooks');
+            $this->get('/{notebookId}/note', '\App\Controller\NotebookController:getNotebooksAction')->setName('getNotebooks');
+
+        });
+
     })->add('\App\Middleware\AuthMiddleware');
 
 });

@@ -2,25 +2,25 @@ import Vue from 'vue'
 
 export default {
   fetchAll (config = {}) {
-    return Vue.axios.get(`/ambiente`, config)
+    return Vue.axios.get(`/api/notebook`, config)
       .then((response) => Promise.resolve(response.data))
       .catch((error) => Promise.reject(error))
   },
 
-  get (ambId, config = {}) {
-    return Vue.axios.get(`/ambiente/${ambId}`, config)
+  get (notebookId, config = {}) {
+    return Vue.axios.get(`/api/notebook/${notebookId}`, config)
       .then((response) => Promise.resolve(response.data))
       .catch((error) => Promise.reject(error))
   },
 
-  addConfiguracao (ambId, payload, config = {}) {
-    return Vue.axios.post(`/ambiente/${ambId}/configuracao`, payload, config)
+  getNote (notebookId, noteId, config = {}) {
+    return Vue.axios.get(`/api/notebook/${notebookId}/note/${noteId}`, config)
       .then((response) => Promise.resolve(response.data))
       .catch((error) => Promise.reject(error))
   },
 
-  updateConfiguracao (ambId, confIndex, payload = {}, config = {}) {
-    return Vue.axios.post(`/ambiente/${ambId}/configuracao/${confIndex}`, payload, config)
+  addNote (notebookId, payload, config = {}) {
+    return Vue.axios.post(`/api/notebook/${notebookId}/`, payload, config)
       .then((response) => Promise.resolve(response.data))
       .catch((error) => Promise.reject(error))
   }

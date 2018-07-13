@@ -16,9 +16,6 @@
 </template>
 
 <script>
-import ambienteService from '../common/services/ambiente'
-import {COMPONENT_LOADING, COMPONENT_LOADED} from '../vuex/mutation-types'
-
 export default {
   name: 'TheLogin',
 

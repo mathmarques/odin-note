@@ -26,19 +26,14 @@ class APITest extends TestCase
         self::$appInstance = $app;
     }
 
-    public function testTestOne()
+    public function testPingPong()
     {
         $env = Environment::mock([
             'SCRIPT_NAME' => '/index.php',
             'REQUEST_URI' => '/api/ping',
             'REQUEST_METHOD' => 'GET',
         ]);
-        $uri = Uri::createFromEnvironment($env);
-        $headers = Headers::createFromEnvironment($env);
-        $cookies = [];
-        $serverParams = $env->all();
-        $body = new RequestBody();
-        $req = new Request('GET', $uri, $headers, $cookies, $serverParams, $body);
+        $req = Request::createFromEnvironment($env);
         $res = new Response();
 
         // Invoke process with optional arg
@@ -46,5 +41,57 @@ class APITest extends TestCase
 
         $this->assertInstanceOf('\Psr\Http\Message\ResponseInterface', $resOut);
         $this->assertEquals('pong', (string)$resOut->getBody());
+    }
+
+    public function testFailLogin()
+    {
+        $_POST = [];
+        $_POST['login'] = 'foo';
+        $_POST['password'] = 'bar';
+
+
+        $env = Environment::mock([
+            'SCRIPT_NAME' => '/index.php',
+            'REQUEST_URI' => '/api/auth',
+            'REQUEST_METHOD' => 'POST',
+            'HTTP_CONTENT_TYPE' => 'multipart/form-data; boundary=---foo'
+        ]);
+        $req = Request::createFromEnvironment($env);
+        $res = new Response();
+
+        unset($_POST);
+
+        // Invoke process with optional arg
+        $resOut = self::$appInstance->process($req, $res);
+
+        $this->assertInstanceOf('\Psr\Http\Message\ResponseInterface', $resOut);
+        $jsonResponse = json_decode((string)$resOut->getBody(), true);
+        $this->assertEquals(false, $jsonResponse['success']);
+    }
+
+    public function testSuccessFullLogin()
+    {
+        $_POST = [];
+        $_POST['login'] = '123';
+        $_POST['password'] = '123';
+
+        $env = Environment::mock([
+            'SCRIPT_NAME' => '/index.php',
+            'REQUEST_URI' => '/api/auth',
+            'REQUEST_METHOD' => 'POST',
+            'HTTP_CONTENT_TYPE' => 'multipart/form-data; boundary=---foo'
+        ]);
+        $req = Request::createFromEnvironment($env);
+        $res = new Response();
+
+        unset($_POST);
+
+        // Invoke process with optional arg
+        $resOut = self::$appInstance->process($req, $res);
+
+        $this->assertInstanceOf('\Psr\Http\Message\ResponseInterface', $resOut);
+        $jsonResponse = json_decode((string)$resOut->getBody(), true);
+        $this->assertEquals(true, $jsonResponse['success']);
+        $this->assertTrue(isset($jsonResponse['user']));
     }
 }
