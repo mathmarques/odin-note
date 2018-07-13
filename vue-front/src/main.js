@@ -18,7 +18,7 @@ import './assets/css/fontawesome-all.css'
 
 Vue.use(BootstrapVue)
 
-Vue.config.productionTip = false
+Vue.config.productionTip = true
 
 new Vue({
   router,

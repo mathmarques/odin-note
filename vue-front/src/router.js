@@ -12,7 +12,8 @@ import { AUTH_LOGGED_OUT } from './vuex/mutation-types'
 Vue.use(VueRouter)
 
 function requireAuth (to, from, next) {
-  store.dispatch('fetchAuth').then(() => {
+  console.log('MEU PAU')
+  store.dispatch('me').then(() => {
     next()
   }).catch(() => {
     next({path: '/login'})
@@ -28,7 +29,7 @@ const routes = [
     beforeEnter: requireAuth,
     children: [
       {path: '', name: 'dashboard', component: DashboardHome},
-      {path: 'ambiente/:id', name: 'ambiente', component: DashboardAmbiente, beforeEnter: requireAuth},
+      {path: 'ambiente/:id', name: 'ambiente', component: DashboardAmbiente},
     ]
   },
   {

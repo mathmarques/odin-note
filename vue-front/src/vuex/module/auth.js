@@ -5,16 +5,13 @@ import authService from '../../common/services/auth'
 import {AUTHENTICATE, AUTHENTICATE_FAILURE, AUTH_FETCHED, AUTH_LOGGED_OUT} from '../mutation-types'
 
 const state = {
-  token: localStorage.getItem('token'),
   me: undefined,
   error: undefined
 }
 
 const mutations = {
   [AUTHENTICATE] (state, data) {
-    state.token = data.token
-    localStorage.setItem('token', state.token)
-    state.me = data.me
+    state.me = data.user
   },
 
   [AUTHENTICATE_FAILURE] (state, data) {
@@ -26,8 +23,6 @@ const mutations = {
   },
 
   [AUTH_LOGGED_OUT] (state) {
-    state.token = undefined
-    localStorage.removeItem('token')
     state.me = undefined
   }
 }
@@ -51,15 +46,15 @@ const actions = {
     return new Promise((resolve, reject) => {
       if (state.me) {
         resolve()
-      } else if (state.token) {
-        authService.fetch().then(response => {
+      } else {
+        authService.me().then(response => {
+          console.log(response);
           commit(AUTH_FETCHED, response)
           resolve()
         }).catch(error => {
+          console.log(error);
           reject(error)
         })
-      } else {
-        reject()
       }
     })
   }
@@ -67,7 +62,7 @@ const actions = {
 
 const getters = {
   getMeFirstName: state => {
-    return state.me ? _.words(state.me.nome)[0] : ''
+    return state.me ? _.words(state.me.usuario)[0] : ''
   }
 }
 

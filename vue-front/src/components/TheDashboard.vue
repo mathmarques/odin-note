@@ -40,8 +40,6 @@
 </template>
 
 <script>
-import ambienteService from '../common/services/ambiente'
-import {COMPONENT_LOADING, COMPONENT_LOADED} from '../vuex/mutation-types'
 
 export default {
   name: 'TheDashboard',
@@ -63,13 +61,6 @@ export default {
   },
 
   created () {
-    /*his.$store.commit(COMPONENT_LOADING)
-    ambienteService.fetchAll().then((response) => {
-      this.ambientes = response.Ambientes
-      this.$store.commit(COMPONENT_LOADED)
-    }).catch(() => {
-      console.log('Erro')
-    })*/
   }
 
 }

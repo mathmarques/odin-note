@@ -6,13 +6,15 @@ import VueAxios from 'vue-axios'
 export default function (Vue, store) {
   Vue.use(VueAxios, axios)
 
-  Vue.axios.defaults.baseURL = 'http://localhost:3000/'
+  Vue.axios.defaults.baseURL = 'http://localhost/odin-note/public'
 
   Vue.axios.interceptors.request.use(function (config) {
     store.commit(HTTP_REQUEST_INCREMENT)
     if (store.state.auth.token) {
       config.headers['authorization'] = `Bearer ${store.state.auth.token}`
     }
+
+    config.withCredentials = true
 
     return config
   }, function (error) {

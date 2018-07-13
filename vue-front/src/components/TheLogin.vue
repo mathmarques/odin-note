@@ -8,8 +8,8 @@
       </b-alert>
       <label for="login" class="sr-only">Usuário</label>
       <input type="text" id="login" class="form-control" placeholder="Usuário" v-model.trim="form.login">
-      <label for="senha" class="sr-only">Senha</label>
-      <input type="password" id="senha" class="form-control" placeholder="Senha" v-model.trim="form.senha">
+      <label for="password" class="sr-only">Senha</label>
+      <input type="password" id="password" class="form-control" placeholder="Senha" v-model.trim="form.password">
       <button class="btn btn-lg btn-primary btn-block mt-3" type="submit">Entrar</button>
     </form>
   </div>
@@ -26,8 +26,7 @@ export default {
     return {
       form: {
         login: undefined,
-        senha: undefined,
-        ambiente: 0
+        password: undefined,
       }
     }
   },
@@ -49,13 +48,9 @@ export default {
   },
 
   created () {
-    this.$store.commit(COMPONENT_LOADING)
-    ambienteService.fetchAll().then((response) => {
-      this.ambientes = response.Ambientes
+    this.$store.dispatch('me').then(() => {
+      this.$router.replace({name: 'dashboard'})
     }).catch(() => {
-      console.log('Erro')
-    }).then(() => {
-      this.$store.commit(COMPONENT_LOADED)
     })
   }
 }
